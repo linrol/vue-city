@@ -1,11 +1,11 @@
 {
-  "name": "vue-city",
+  "name": "vue-linrol-school",
   "version": "2.0.0",
-  "description": "城市选择器",
-  "author": "xinxingyu",
+  "description": "学校选择器",
+  "author": "linrol",
   "repository": {
 	"type": "git",
-	"url": "git+https://github.com/xinxingyu/vue-city"
+	"url": "git+https://github.com/linrol/vue-linrol-school.git"
   },
   "scripts": {
     "dev": "node build/dev-server.js",
