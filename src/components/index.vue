@@ -8,7 +8,7 @@
                 </div>
                 <a href="javascript:void(0)" @click="hide">取消</a>
             </div>
-            <div class="xin-widget-citys-local bdb">当前学校：{{localCity.cityName || "无法定位当前学校"}}</div>
+            <div class="xin-widget-citys-local bdb">当前学校：{{localSchool.SCHOOL_NAME || "无法定位当前学校"}}</div>
             <div class="xin-widget-citys-list" v-if="input == ''">
                 <dl>
                     <template v-for="(item, index) in letterList">
@@ -19,14 +19,14 @@
                             <dt v-if="isNaN(index)">{{index}}</dt>
                         </template>
                         <template v-for="(item2, key) in item">
-                            <dd class="bdb" @click="_chooseOne(item2)">{{item2.cityName}}</dd>
+                            <dd class="bdb" @click="_chooseOne(item2)">{{item2.SCHOOL_NAME}}</dd>
                         </template>
                     </template>
                 </dl>
             </div>
             <div class="xin-widget-citys-searchlist" v-if="input !== ''">
                 <ul v-if="searchList.length!==0">
-                    <li class="bdb" v-for="item in searchList" @click="_chooseOne(item)">{{item.cityName}}</li>
+                    <li class="bdb" v-for="item in searchList" @click="_chooseOne(item)">{{item.SCHOOL_NAME}}</li>
                 </ul>
                 <div v-else class="nomatch">没有匹配学校</div>
             </div>
@@ -34,7 +34,7 @@
 		<div class="xin-widget-citys-letnav" v-if="isShow && input == '' && !simple" @touchmove="_touchLetters">
 	        <ol>
 	            <template v-for="(item, index) in letterList">
-	                <li v-if="isNaN(index) && index=='star'" @click="_chooseLetter" data-type="starCity"><em class='star-small' data-type="starCity"></em></li>
+	                <li v-if="isNaN(index) && index=='star'" @click="_chooseLetter" data-type="starSchool"><em class='star-small' data-type="starSchool"></em></li>
 	                <li v-else @click="_chooseLetter" data-type="letter">{{index}}</li>
 	            </template>
 	        </ol>
@@ -58,19 +58,19 @@
 				type: Boolean,
 				default: false
 			},
-            localCity: {
+            localSchool: {
                 type: Object
             },
-            starCity: {
+            starSchool: {
                 type: Array
             },
-            cityData: {
+            schoolData: {
                 type: Array
             },
             onChoose: {
                 type: Function
             },
-            initCity: {
+            initSchool: {
     			type: Function,
                 default: null
     		},
@@ -94,9 +94,9 @@
             }
         },
         watch: {
-            cityData: function(){
-                if(this.cityData && this.cityData.length > 0){
-                    this._formatCityList(this.cityData);
+            schoolData: function(){
+                if(this.schoolData && this.schoolData.length > 0){
+                    this._formatSchoolList(this.schoolData);
                 }
             },
             input: function() {
@@ -110,8 +110,8 @@
             var _this = this;
 
             done();
-            if(this.cityData && this.cityData.length > 0){
-                this._formatCityList(this.cityData);
+            if(this.schoolData && this.schoolData.length > 0){
+                this._formatschoolList(this.schoolData);
             }
         },
         methods: {
@@ -127,7 +127,7 @@
             _chooseDefault: function() {
                 let _this = this;
                 let arr = this.list.filter(function(item) {
-                    return _this.localCity.cityId == item.cityId
+                    return _this.localSchool.SCHOOL_CODE == item.SCHOOL_CODE
                 })
                 if(arr.length > 0){
                     _this._chooseOne(arr[0]);
@@ -141,7 +141,7 @@
             _chooseLetter: function(e) {
                 let symbol =  e.target.getAttribute('data-type')
 
-                if(symbol == 'starCity'){
+                if(symbol == 'starSchool'){
                     this.targetLetter = '热门学校';
                 }else{
                     this.targetLetter = e.target.innerText;
@@ -178,7 +178,7 @@
                                 targetIndex = Math.ceil(olTouchY / liHei),
                                 target = document.querySelectorAll('.xin-widget-citys-letnav li')[targetIndex - 1]
 
-                            if(target.getAttribute('data-type') == 'starCity'){
+                            if(target.getAttribute('data-type') == 'starSchool'){
                                 this.targetLetter = '热门学校';
                             }else{
                                 this.targetLetter = target.innerText;
@@ -230,13 +230,13 @@
                     for(var j = 0; j < this.letterList[i].length; j++){
                         if(
                             reg.test(this.letterList[i][j][
-                                'cityName'
+                                'SCHOOL_NAME'
                             ]) ||
                             reg.test(this.letterList[i][j][
-                                'cityFirstLetter'
+                                'SCHOOL_FIRST_LETTER'
                             ]) ||
                             reg.test(this.letterList[i][j][
-                                'citySpell'
+                                'SCHOOL_SPELL'
                             ])
                         ){
                             _arr.push(this.letterList[i][j]);
@@ -249,7 +249,7 @@
              * format data of city
              * @param  {[Array]} arr [cityList]
              */
-            _formatCityList: function(arr) {
+            _formatSchoolList: function(arr) {
                 var letterArr = {};
 
 
@@ -260,10 +260,10 @@
                     }
 				}else{
 					// 添加热门学校
-					if(this.starCity && this.starCity.length > 0){
-						let _starCity = this.starCity
+					if(this.starSchool && this.starSchool.length > 0){
+						let _starSchool = this.starSchool
 
-						_starCity.forEach((value, index, array) => {
+						_starSchool.forEach((value, index, array) => {
 							if(!('star' in letterArr)){
 								letterArr['star'] = []
 								letterArr['star'].unshift(value)
@@ -273,11 +273,11 @@
 						})
 					}
 	                for (var i = 0; i < arr.length; i++) {
-	                    if (!(arr[i]['cityFirstLetter'] in letterArr)) {
-	                        letterArr[arr[i]['cityFirstLetter']] = [];
-	                        letterArr[arr[i]['cityFirstLetter']].push(arr[i]);
+	                    if (!(arr[i]['SCHOOL_FIRST_LETTER'] in letterArr)) {
+	                        letterArr[arr[i]['SCHOOL_FIRST_LETTER']] = [];
+	                        letterArr[arr[i]['SCHOOL_FIRST_LETTER']].push(arr[i]);
 	                    } else {
-	                        letterArr[arr[i]['cityFirstLetter']].push(arr[i]);
+	                        letterArr[arr[i]['SCHOOL_FIRST_LETTER']].push(arr[i]);
 	                    }
 	                }
 				}
@@ -313,7 +313,7 @@
         overflow-y: scroll;
         -webkit-overflow-scrolling: touch;
         // padding: 0.1rem 0.1rem 0 0.1rem;
-        margin: 0.1rem 0.1rem 0 0.1rem;
+        // margin: 0.1rem 0.1rem 0 0.1rem;
 		box-shadow: 0 .01rem .06rem rgba(0, 0, 0, .2);
         .xin-widget-citys-content{
             width: 100%;
