@@ -4,16 +4,16 @@
         <div class="xin-widget-citys-content">
             <div class="xin-widget-citys-header bdb">
                 <div class="xin-widget-citys-iptbox">
-                    <input type="text" placeholder="城市中文名或拼音" v-model="input">
+                    <input type="text" placeholder="学校中文名或拼音" v-model="input">
                 </div>
                 <a href="javascript:void(0)" @click="hide">取消</a>
             </div>
-            <div class="xin-widget-citys-local bdb">当前城市：{{localCity.cityName || "无法定位当前城市"}}</div>
+            <div class="xin-widget-citys-local bdb">当前学校：{{localCity.cityName || "无法定位当前学校"}}</div>
             <div class="xin-widget-citys-list" v-if="input == ''">
                 <dl>
                     <template v-for="(item, index) in letterList">
                         <template v-if="index == 'star'">
-                            <dt><em class="star-big"></em>热门城市</dt>
+                            <dt><em class="star-big"></em>热门学校</dt>
                         </template>
                         <template v-else>
                             <dt v-if="isNaN(index)">{{index}}</dt>
@@ -28,7 +28,7 @@
                 <ul v-if="searchList.length!==0">
                     <li class="bdb" v-for="item in searchList" @click="_chooseOne(item)">{{item.cityName}}</li>
                 </ul>
-                <div v-else class="nomatch">没有匹配城市</div>
+                <div v-else class="nomatch">没有匹配学校</div>
             </div>
         </div>
 		<div class="xin-widget-citys-letnav" v-if="isShow && input == '' && !simple" @touchmove="_touchLetters">
@@ -142,7 +142,7 @@
                 let symbol =  e.target.getAttribute('data-type')
 
                 if(symbol == 'starCity'){
-                    this.targetLetter = '热门城市';
+                    this.targetLetter = '热门学校';
                 }else{
                     this.targetLetter = e.target.innerText;
                 }
@@ -179,7 +179,7 @@
                                 target = document.querySelectorAll('.xin-widget-citys-letnav li')[targetIndex - 1]
 
                             if(target.getAttribute('data-type') == 'starCity'){
-                                this.targetLetter = '热门城市';
+                                this.targetLetter = '热门学校';
                             }else{
                                 this.targetLetter = target.innerText;
                             }
@@ -259,7 +259,7 @@
                         letterArr[i].push(arr[i]);
                     }
 				}else{
-					// 添加热门城市
+					// 添加热门学校
 					if(this.starCity && this.starCity.length > 0){
 						let _starCity = this.starCity
 
